@@ -1,0 +1,13 @@
+{
+  "name": "marvel-chilar-youtube-notifier",
+  "version": "1.0.0",
+  "description": "Marvel_chilar Telegram kanali uchun YouTube -> Telegram avtomatik xabar yuboruvchi",
+  "main": "index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
