@@ -1,0 +1,39 @@
+name: Auto-approve channel join requests
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"   # har 5 daqiqada
+  workflow_dispatch: {}      # qo'lda ishga tushirish uchun
+
+permissions:
+  contents: write
+
+jobs:
+  approve:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repo'ni olish
+        uses: actions/checkout@v4
+
+      - name: Python o'rnatish
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Skriptni ishga tushirish
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          TARGET_CHAT_ID: ${{ secrets.TARGET_CHAT_ID }}
+        run: python approve_join_requests.py
+
+      - name: offset.json'ni commit qilish
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain offset.json)" ]; then
+            git add offset.json
+            git commit -m "chore: update offset [skip ci]"
+            git push
+          else
+            echo "O'zgarish yo'q"
+          fi
